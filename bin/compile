@@ -1,0 +1,23 @@
+#!/bin/bash
+
+BUILD_DIR=$1
+
+indent() {
+  sed 's/^/       /'
+}
+
+ELASTIC_AGENT_VERSION=${ELASTIC_AGENT_VERSION:-7.16.1}
+
+BUILDPACK_PATH=$(dirname $(readlink -f $0))/../
+
+echo "Downloading Elastic Agent version $ELASTIC_AGENT_VERSION" | indent
+curl https://artifacts.elastic.co/downloads/beats/elastic-agent/elastic-agent-$ELASTIC_AGENT_VERSION-linux-x86_64.tar.gz -L --silent -o /tmp/elastic-agent.tar.gz
+
+echo "Extracting Elastic Agent" | indent
+mkdir -p $BUILD_DIR/elastic-agent
+tar -xf /tmp/elastic-agent.tar.gz -C $BUILD_DIR/elastic-agent
+
+mkdir -p $BUILD_DIR/bin
+cp $BUILDPACK_PATH/bin/elastic-agent $BUILD_DIR/bin/elastic-agent
+
+echo "Done" | indent
