@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "Heartbeat"
+exit 0
